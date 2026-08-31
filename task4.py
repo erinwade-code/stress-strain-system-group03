@@ -61,6 +61,7 @@ def create_test_record(sample_id: str, material: str, stress: float, strain: flo
         "factor_of_safety": round(fos, 2),
         "status": "SAFE" if fos >= 1.0 else "FAILED"
     }
+  
 def add_record_to_history(history_list: list, record: dict) -> None:
     history_list.append(record)
 def display_test_results(record: dict) -> None:
@@ -87,4 +88,31 @@ def display_session_summary(history_list: list) -> None:
     for r in history_list:
         print(f"{r['sample_id']:<12} | {r['material']:<22} | {r['stress_mpa']:<8} | {r['factor_of_safety']:<6} | {r['status']}")
     print("#"*65 + "\n")
+
+def main():
+    test_history = []
+    test_counter = 1
+    while True:
+        sample_id = f"SAMPLE-{test_counter:03d}"
+        print(f"\nPerforming calculation for {sample_id}...")
+        material_name, yield_strength = select_material()
+        force = get_positive_float("Enter Force applied (N): ")
+        area = get_positive_float("Enter Cross-Sectional Area (mm²): ")
+        orig_len = get_positive_float("Enter Original Length (mm): ")
+        dl = get_positive_float("Enter Change in Length / ΔL (mm): ")
+        stress = calculate_stress(force, area)
+        strain = calculate_strain(dl, orig_len)
+        modulus = calculate_youngs_modulus(stress, strain)
+        fos = calculate_factor_of_safety(yield_strength, stress)
+        record = create_test_record(sample_id, material_name, stress, strain, modulus, fos)
+        add_record_to_history(test_history, record)
+        display_test_results(record)
+        test_counter += 1
+        cont = input("Perform another calculation? (y/n): ").strip().lower()
+        if cont != 'y':
+            break
+    display_session_summary(test_history)
+
+if __name__ == "__main__":
+    main()
 
