@@ -36,5 +36,18 @@ def select_material() -> tuple[str, float]:
         "3": ("Titanium Alloy (Ti-6Al-4V)", 880.0),
         "4": ("Custom Material", None)
     }
-
+print("\nSelect Material:")
+    for key, (name, strength) in materials.items():
+        if strength:
+            print(f"  [{key}] {name} - Yield Strength: {strength} MPa")
+        else:
+            print(f"  [{key}] {name}")
+    while True:
+        choice = input("Enter choice (1-4): ").strip()
+        if choice in materials:
+            name, strength = materials[choice]
+            if strength is None:
+                strength = get_positive_float("Enter custom yield strength (MPa): ")
+            return name, strength
+        print("Error: Selection out of range.")
 
