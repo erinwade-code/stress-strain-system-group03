@@ -113,7 +113,17 @@ class StressStrainTest:
             f"Strain={self.strain:.6f}, "
             f"Young's Modulus={self.youngs_modulus:.2f} GPa"
         )
+    def __eq__(self, other):
+        if not isinstance(other, StressStrainTest):
+            return False
+        return (
+            self.material.name == other.material.name and
+            self.stress == other.stress and
+            self.strain == other.strain
+        )
 
+    def __lt__(self, other):
+        return self.stress < other.stress
 
 # Example material subclass
 class Metal(Material):
