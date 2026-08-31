@@ -108,6 +108,15 @@ def main():
 
         again = input("\nPerform another calculation (y/n):").strip()lower()
 
-        while again not in ("y", "n", "yes", "no")
+        while again not in ("y", "n", "yes", "no"):
+            again = input("Pleaase enter 'y' or 'n': ").strip().lower()
+
+        if again in ("n", "no"):
+            print("\n Thank you for using the Stress & Strain Calculator.")
+
+if __main__ == "__main__":
+    main()
+            
+        
         
               
