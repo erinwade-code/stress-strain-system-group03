@@ -29,3 +29,12 @@ def get_positive_float(prompt: str) -> float:
         except ValueError:
             print("Error: Invalid numeric input.")
 
+def select_material() -> tuple[str, float]:
+    materials = {
+        "1": ("Structural Steel (A36)", 250.0),
+        "2": ("Aluminum Alloy (6061-T6)", 276.0),
+        "3": ("Titanium Alloy (Ti-6Al-4V)", 880.0),
+        "4": ("Custom Material", None)
+    }
+
+
