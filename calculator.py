@@ -35,19 +35,22 @@ def main():
     print()
 
     # TODO: Display the calculated results
-    # TODO: Print stress with 2 decimal places and units (Pa)
-    # TODO: Print strain with 6 decimal places (no units - it's dimensionless)
+    print(f"Calculated stress: {stress:.2f} Pa")
+    print(f"Calculated strain: {strain:.6f}")
 
     print()
 
-    # BONUS TODO: Convert stress to MPa (divide by 1,000,000)
-    # BONUS TODO: Determine if loading is tension or compression
+    stress_mpa = stress/1000000
+    print(f"Stress in MPa: {stress_mpa:.2f} MPa")
+    if change_in_length >= 0:
+        print("Loading type: Tension")
+    else:
+        print("Loading type: Compression")
 
     print()
     print("=== Analysis Complete ===")
 
 
 # TODO: Add the standard Python execution pattern
-# Hint: if __name__ == "__main__":
-# Read this if you are still confused about this pattern:
-# https://www.geeksforgeeks.org/what-does-the-if-__name__-__main__-do/
+if __name__ == "__main__":
+    main()
