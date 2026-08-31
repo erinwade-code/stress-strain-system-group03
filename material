@@ -113,7 +113,10 @@ class Plastic(Material):
     ):
         super().__init__(name, properties)
         self.is_thermoplastic = is_thermoplastic
-        self.polymer_type = polymer_type       
+        self.polymer_type = polymer_type
+        valid_types = ["PVC", "Polyethylene", "Nylon"]
+        if polymer_type not in valid_types:
+            raise ValueError(f"polymer_type must be one of {valid_types}")    
 
     def __str__(self) -> str:
         polymer = "PVC" if self.polymer_type else "Nylon"
