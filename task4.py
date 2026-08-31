@@ -36,7 +36,7 @@ def select_material() -> tuple[str, float]:
         "3": ("Titanium Alloy (Ti-6Al-4V)", 880.0),
         "4": ("Custom Material", None)
     }
-print("\nSelect Material:")
+    print("\nSelect Material:")  # Line 37
     for key, (name, strength) in materials.items():
         if strength:
             print(f"  [{key}] {name} - Yield Strength: {strength} MPa")
