@@ -61,3 +61,22 @@ def main():
 
     print("\n=== Session Summary ===")
     print(f"Total calculations performed: {len(calculations_history)}")
+    
+    if calculations_history:
+        print(f"Materials tested: {', '.join(unique_materials)} ({len(unique_materials)} materials)")
+
+        highest_stress = max(calculations_history, key=lambda x: x["stress"])
+        avg_strain = sum(r["strain"] for r in calculations_history) / len(calculations_history)
+
+        print("\nStatistical Analysis:")
+        print(f"- Highest stress: {highest_stress['stress']:.2f} {UNITS[3]} ({highest_stress['material']})")
+        print(f"- Average strain across all tests: {avg_strain:.6f}")
+
+        print("\nDetailed History:")
+        for i, record in enumerate(calculations_history, 1):
+            print(
+                f"Test {i}: {record['material']} | Force: {record['force']} {UNITS[0]} | Stress: {record['stress']:.2f} {UNITS[3]}")
+
+
+if __name__ == "__main__":
+    main()
