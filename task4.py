@@ -63,4 +63,15 @@ def create_test_record(sample_id: str, material: str, stress: float, strain: flo
     }
 def add_record_to_history(history_list: list, record: dict) -> None:
     history_list.append(record)
+def display_test_results(record: dict) -> None:
+    print("\n" + "="*40)
+    print(f"TEST RESULTS: {record['sample_id']}")
+    print("="*40)
+    print(f"Material         : {record['material']}")
+    print(f"Calculated Stress: {record['stress_mpa']} MPa")
+    print(f"Calculated Strain: {record['strain']}")
+    print(f"Young's Modulus  : {record['youngs_modulus_gpa']} GPa")
+    print(f"Factor of Safety : {record['factor_of_safety']} ({record['status']})")
+    print("="*40 + "\n")
+  
 
