@@ -74,4 +74,17 @@ def display_test_results(record: dict) -> None:
     print(f"Factor of Safety : {record['factor_of_safety']} ({record['status']})")
     print("="*40 + "\n")
   
+def display_session_summary(history_list: list) -> None:
+    if not history_list:
+        print("\nNo records saved in this session.")
+        return
+    print("\n" + "#"*65)
+    print("SESSION HISTORY SUMMARY")
+    print("#"*65)
+    header = f"{'Sample ID':<12} | {'Material':<22} | {'Stress':<8} | {'FoS':<6} | {'Status'}"
+    print(header)
+    print("-" * len(header))
+    for r in history_list:
+        print(f"{r['sample_id']:<12} | {r['material']:<22} | {r['stress_mpa']:<8} | {r['factor_of_safety']:<6} | {r['status']}")
+    print("#"*65 + "\n")
 
