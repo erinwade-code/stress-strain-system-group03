@@ -61,4 +61,6 @@ def create_test_record(sample_id: str, material: str, stress: float, strain: flo
         "factor_of_safety": round(fos, 2),
         "status": "SAFE" if fos >= 1.0 else "FAILED"
     }
+def add_record_to_history(history_list: list, record: dict) -> None:
+    history_list.append(record)
 
