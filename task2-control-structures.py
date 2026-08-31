@@ -1,10 +1,10 @@
 materials = {
-    "steel": {"yield strength": 250, "youngs_modulus":200 },
-    "aluminum":{"yield strength": 95, "youngs_modulus":69},
-    "titanium":{"yield strenght": 880, "youngs_modulus":114}
+    "steel": {"yield_strength": 250, "youngs_modulus":200 },
+    "aluminum":{"yield_strength": 95, "youngs_modulus":69},
+    "titanium":{"yield_strenght": 880, "youngs_modulus":114}
 }
 
-def get_poisitive_float(prompt, allow_zero=False):
+def get_positive_float(prompt, allow_zero=False):
 
     while True:
         try:
@@ -40,8 +40,8 @@ def select_material():
             name, props = "Titanium", materials["titanium"]
         elif choice == '4':
             name = input("Enter a custom material name: ").strip()
-            yield_strength = get_poisitive_float("Enter yield strength MPa")
-            youngs_modulus = get_poisitive_float("Enter Young's modulus GPa ")
+            yield_strength = get_positive_float("Enter yield strength MPa")
+            youngs_modulus = get_positive_float("Enter Young's modulus GPa ")
             props = {"yield_strength": yield_strength, "youngs_modulus": youngs_modulus}
         else:
             print("Invalid. Enter 1, 2, 3, or 4.")
