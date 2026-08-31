@@ -134,8 +134,12 @@ class Composite(Material):
     def __str__(self) -> str:
         matrixm = self.matrix_material.name
         reinforce = self.reinforcement_material.name
+        if not isinstance(matrix_material, Material):
+            raise ValueError("matrix_material must be a Material instance")
+        if not isinstance(reinforcement_material, Material):
+            raise ValueError("reinforcement_material must be a Material instance")
         return f"{self.name} (contains both {matrixm} and {reinforce}, with its Density: {self.properties.density} kg/m³)" 
-    
+
 # Example usage
 steel_properties = MaterialProperties(
     density=7850, yield_strength=250, typical_youngs_modulus=200  # MPa  # GPa
