@@ -113,6 +113,7 @@ class StressStrainTest:
             f"Strain={self.strain:.6f}, "
             f"Young's Modulus={self.youngs_modulus:.2f} GPa"
         )
+    
     def __eq__(self, other):
         if not isinstance(other, StressStrainTest):
             return False
@@ -145,6 +146,30 @@ class ResultTestAnalysis:
 
         return averages
 
+    def generate_summary_report(self):
+        averages = self.average_stress_by_material()
+        failed = 0
+        passed = 0
+        for test in self.tests:
+            if test.will_fail():
+                failed += 1
+            else:
+                passed += 1 
+
+        averages_text = ""
+        for name, avg in averages.items():
+            averages_text += f"  {name}: {avg:.2f} MPa\n"
+
+        report = (
+            f"Test Summary Report\n"
+            f"Total tests: {passed + failed}\n"
+            f"Passed: {passed}\n"
+            f"Failed: {failed}\n"
+            f"Average stress by material:\n"
+            f"{averages_text}"
+        )        
+        return report
+
 # Example material subclass
 class Metal(Material):
     """A metal material."""
@@ -171,7 +196,7 @@ class Plastic(Material):
         self.polymer_type = polymer_type
         valid_types = ["PVC", "Polyethylene", "Nylon"]
         if polymer_type not in valid_types:
-            raise ValueError(f"polymer_type must be one of {valid_types}")    
+            raise ValueError(f"polymer_type must be one of {valid_types}")       
 
     def __str__(self) -> str:
         polymer = "PVC" if self.polymer_type else "Nylon"
@@ -188,16 +213,16 @@ class Composite(Material):
         super().__init__(name, properties)
         self.matrix_material = matrix_material
         self.reinforcement_material = reinforcement_material
-
-    def __str__(self) -> str:
-        matrixm = self.matrix_material.name
-        reinforce = self.reinforcement_material.name
         if not isinstance(matrix_material, Material):
             raise ValueError("matrix_material must be a Material instance")
         if not isinstance(reinforcement_material, Material):
             raise ValueError("reinforcement_material must be a Material instance")
-        return f"{self.name} (contains both {matrixm} and {reinforce}, with its Density: {self.properties.density} kg/m³)" 
 
+    def __str__(self) -> str:
+        matrixm = self.matrix_material.name
+        reinforce = self.reinforcement_material.name
+        return f"{self.name} (contains both {matrixm} and {reinforce}, with its Density: {self.properties.density} kg/m³)" 
+    
 # Example usage
 steel_properties = MaterialProperties(
     density=7850, yield_strength=250, typical_youngs_modulus=200  # MPa  # GPa
