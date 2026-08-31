@@ -1,23 +1,48 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
-
-@dataclass
 class MaterialProperties:
     """Properties of a material."""
 
-    density: float  # kg/m³
-    yield_strength: float  # MPa
+    def __init__(self,
+    density: float,  # kg/m³
+    yield_strength: float,  # MPa
     typical_youngs_modulus: float  # GPa
+    ):
 
-    def __post_init__(self):
-        """Validate properties."""
-        if self.density <= 0:
+        self.density = density
+        self.yield_strength = yield_strength
+        self.typical_youngs_modulus = typical_youngs_modulus
+
+    @property
+    def density(self):
+        return self._density
+
+    @density.setter
+    def density(self, value):
+        if value <= 0:
             raise ValueError("Density must be positive")
-        if self.yield_strength <= 0:
+        self._density = value
+
+    @property
+    def yield_strength(self):
+        return self._yield_strength
+
+    @yield_strength.setter
+    def yield_strength(self, value):
+        if value <= 0:
             raise ValueError("Yield strength must be positive")
-        if self.typical_youngs_modulus <= 0:
+        self._yield_strength = value
+
+    @property
+    def typical_youngs_modulus(self):
+        return self._typical_youngs_modulus
+
+    @typical_youngs_modulus.setter
+    def typical_youngs_modulus(self, value):
+        if value <= 0:
             raise ValueError("Young's modulus must be positive")
+        self._typical_youngs_modulus = value 
 
 class Material:
     """Base class for all materials."""
