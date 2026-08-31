@@ -51,3 +51,14 @@ print("\nSelect Material:")
             return name, strength
         print("Error: Selection out of range.")
 
+def create_test_record(sample_id: str, material: str, stress: float, strain: float, modulus: float, fos: float) -> dict:
+    return {
+        "sample_id": sample_id,
+        "material": material,
+        "stress_mpa": round(stress, 2),
+        "strain": round(strain, 6),
+        "youngs_modulus_gpa": round(modulus, 2),
+        "factor_of_safety": round(fos, 2),
+        "status": "SAFE" if fos >= 1.0 else "FAILED"
+    }
+
