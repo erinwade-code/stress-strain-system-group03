@@ -125,6 +125,26 @@ class StressStrainTest:
     def __lt__(self, other):
         return self.stress < other.stress
 
+class ResultTestAnalysis:
+
+    def __init__(self, tests: List[StressStrainTest]):
+        self.tests = tests
+
+    def average_stress_by_material(self):
+        stress_by_material = {}
+        for test in self.tests:
+            name = test.material.name
+            if name not in stress_by_material:
+                stress_by_material[name] = [test.stress]
+            else:
+                stress_by_material[name].append(test.stress)
+    
+        averages = {}
+        for name, stresses in stress_by_material.items():
+            averages[name] = sum(stresses) / len(stresses)
+
+        return averages
+
 # Example material subclass
 class Metal(Material):
     """A metal material."""
