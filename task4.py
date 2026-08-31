@@ -1,24 +1,29 @@
 def calculate_stress(force: float, area: float) -> float:
-  if area <= 0: 
-    raise ValueError("Cross-sectional area must be greater than zero.")
-  return force / area
-  
+    """Calculate stress in MPa."""
+    if area <= 0:
+        raise ValueError("Cross-sectional area must be greater than zero.")
+    return force / area
+
 def calculate_strain(change_in_length: float, original_length: float) -> float:
-  if original_length <= 0:
-    raise ValueError("Original length must be greater than zero.")
-  return change_in_length / original_length
-  
+    """Calculate dimensionless strain."""
+    if original_length <= 0:
+        raise ValueError("Original length must be greater than zero.")
+    return change_in_length / original_length
+
 def calculate_youngs_modulus(stress: float, strain: float) -> float:
+    """Calculate Young's Modulus in GPa."""
     if strain <= 0:
         raise ValueError("Strain must be greater than zero.")
     return (stress / strain) / 1000.0
 
 def calculate_factor_of_safety(yield_strength: float, applied_stress: float) -> float:
+    """Calculate Factor of Safety."""
     if applied_stress <= 0:
         raise ValueError("Applied stress must be greater than zero.")
     return yield_strength / applied_stress
 
 def get_positive_float(prompt: str) -> float:
+    """Validate and return a positive float from user input."""
     while True:
         try:
             val = float(input(prompt))
@@ -30,13 +35,14 @@ def get_positive_float(prompt: str) -> float:
             print("Error: Invalid numeric input.")
 
 def select_material() -> tuple[str, float]:
+    """Select material and return name and yield strength."""
     materials = {
         "1": ("Structural Steel (A36)", 250.0),
         "2": ("Aluminum Alloy (6061-T6)", 276.0),
         "3": ("Titanium Alloy (Ti-6Al-4V)", 880.0),
         "4": ("Custom Material", None)
     }
-    print("\nSelect Material:")  # Line 37
+    print("\nSelect Material:")
     for key, (name, strength) in materials.items():
         if strength:
             print(f"  [{key}] {name} - Yield Strength: {strength} MPa")
@@ -52,6 +58,7 @@ def select_material() -> tuple[str, float]:
         print("Error: Selection out of range.")
 
 def create_test_record(sample_id: str, material: str, stress: float, strain: float, modulus: float, fos: float) -> dict:
+    """Package results into a dictionary record."""
     return {
         "sample_id": sample_id,
         "material": material,
@@ -61,9 +68,10 @@ def create_test_record(sample_id: str, material: str, stress: float, strain: flo
         "factor_of_safety": round(fos, 2),
         "status": "SAFE" if fos >= 1.0 else "FAILED"
     }
-  
+
 def add_record_to_history(history_list: list, record: dict) -> None:
     history_list.append(record)
+
 def display_test_results(record: dict) -> None:
     print("\n" + "="*40)
     print(f"TEST RESULTS: {record['sample_id']}")
@@ -74,7 +82,7 @@ def display_test_results(record: dict) -> None:
     print(f"Young's Modulus  : {record['youngs_modulus_gpa']} GPa")
     print(f"Factor of Safety : {record['factor_of_safety']} ({record['status']})")
     print("="*40 + "\n")
-  
+
 def display_session_summary(history_list: list) -> None:
     if not history_list:
         print("\nNo records saved in this session.")
