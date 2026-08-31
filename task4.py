@@ -18,3 +18,14 @@ def calculate_factor_of_safety(yield_strength: float, applied_stress: float) -> 
         raise ValueError("Applied stress must be greater than zero.")
     return yield_strength / applied_stress
 
+def get_positive_float(prompt: str) -> float:
+    while True:
+        try:
+            val = float(input(prompt))
+            if val <= 0:
+                print("Error: Value must be strictly greater than zero.")
+                continue
+            return val
+        except ValueError:
+            print("Error: Invalid numeric input.")
+
