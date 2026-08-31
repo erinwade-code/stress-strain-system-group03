@@ -8,7 +8,7 @@ def main():
     # TODO: Print a header for your program
     print("=== Stress and Strain Calculator ===")
     print()
-    """
+
     # TODO: Get user input for the four required values
     # Hint: Use input() to get strings, then convert with float()
     force = float(input("Enter applied force (N): "))
@@ -18,15 +18,19 @@ def main():
     
     # TODO: Calculate stress and strain
     # Hint: Stress = Force / Area, Strain = Change in Length / Original Length
-    stress = # TODO: Calculate stress
-    strain = # TODO: Calculate strain
-    """
+    stress = force/area
+    strain = change_in_length/original_length
+
 
     # TODO: Display the input values using f-string formatting
     print()
     print("=== RESULTS ===")
     # TODO: Print each input value with appropriate formatting
-    # Hint: Use {variable:.2f} for 2 decimal places
+    print(f"Applied Force: {force:.2f} N")
+    print(f"Cross sectional area: {area:.4f} m^2")
+    print(f"Original length: {original_length:.2f} m")
+    print(f"Change in length: {change_in_length:.4f} m")
+
 
     print()
 
