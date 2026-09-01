@@ -49,11 +49,11 @@ def select_material():
 
         selected = {
             "name": name, 
-            "yield_strength": props["yied_strenght"],
+            "yield_strength": props["yield_strength"],
             "youngs_modulus": props["youngs_modulus"],
         }
         print(f"\nSelected maeerial: {selected['name']}")
-        print(f" Yield strenght: {selected['yield_strenght']} MPa")
+        print(f" Yield strenght: {selected['yield_strength']} MPa")
         print(f" Young's modulus: {selected['youngs_modulus']} GPa")
         return selected
 
@@ -86,7 +86,7 @@ def main():
         force = get_poisitive_float("Enter applied force (N): ")
         area = get_poisitive_float("Enter cross-sectional area (m^2):")
         original_length = get_poisitive_float("Enter original length (m):")
-        change_in_length = get_poisitive_float("Enter change in length (m): ", allow zero=True)
+        change_in_length = get_poisitive_float("Enter change in length (m): ", allow_zero=True)
 
         stress = force / area
         strain = change_in_length / original_length
@@ -96,7 +96,7 @@ def main():
         print(f"Force: {force:2f} N")
         print(f"Area: {area:.4f} m^2")
         print(f"Original Length: {original_length:.2f} m")
-        print(f"Change in Length:" {change_in_length:.4f} m")
+        print(f"Change in Length: {change_in_length:.4f} m")
         print()
         print(f"Stress: {stress:.2f} Pa")
         print(f"Strain: {strain:.6f}")
@@ -106,7 +106,7 @@ def main():
         print()
         print("=== Analysis Complete ===")
 
-        again = input("\nPerform another calculation (y/n):").strip()lower()
+        again = input("\nPerform another calculation (y/n):").strip().lower()
 
         while again not in ("y", "n", "yes", "no"):
             again = input("Pleaase enter 'y' or 'n': ").strip().lower()
@@ -114,7 +114,7 @@ def main():
         if again in ("n", "no"):
             print("\n Thank you for using the Stress & Strain Calculator.")
 
-if __main__ == "__main__":
+if __name__ == "__main__":
     main()
             
         
