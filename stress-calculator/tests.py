@@ -1,4 +1,5 @@
 from datetime import datetime
+from material import Material
 import json
 import csv
 from pathlib import Path 
@@ -8,7 +9,7 @@ class StressStrainTest:
 
     def __init__(
         self,
-        material: material,
+        material: Material,
         force: float,
         area: float,
         original_length: float,
