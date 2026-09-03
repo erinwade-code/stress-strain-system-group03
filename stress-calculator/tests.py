@@ -1,16 +1,89 @@
 from datetime import datetime
 import json
 import csv
-
+from typing import List
+ 
+from material import Material
+ 
+ 
 class StressStrainTest:
-    def __init__(self, material_name: str, force: float, area: float, orig_len: float, delta_len: float):
-        self.material_name = material_name
-        self.force = force
-        self.area = area
-        self.orig_len = orig_len
-        self.delta_len = delta_len
+    """A single stress-strain test."""
+    def __init__(
+        self,
+        material: Material,
+        force: float,
+        area: float,
+        original_length: float,
+        change_in_length: float,
+    ):
+        if force <= 0:
+            raise ValueError("Force must be positive")
+        if area <= 0:
+            raise ValueError("Area must be positive")
+        if original_length <= 0:
+            raise ValueError("Original length must be positive")
+ 
+        self.material = material
+        self._force = force
+        self._area = area
+        self._original_length = original_length
+        self._change_in_length = change_in_length
         self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+ 
+    @property
+    def stress(self) -> float:
+        """Calculate stress in MPa."""
+        return self._force / self._area
+ 
+    @property
+    def strain(self) -> float:
+        """Calculate strain (dimensionless)."""
+        return self._change_in_length / self._original_length
+ 
+    @property
+    def youngs_modulus(self) -> float:
+        """Calculate Young's modulus in GPa."""
+        return (self.stress / self.strain) / 1000
+ 
+    def will_fail(self) -> bool:
+        """Determine if the material is likely to fail under this test."""
+        return not self.material.can_withstand_stress(self.stress)
+ 
+    def to_dict(self) -> dict:
+        """Flat, JSON/CSV-friendly representation of this test."""
+        return {
+            "material_name": self.material.name,
+            "force": self._force,
+            "area": self._area,
+            "original_length": self._original_length,
+            "change_in_length": self._change_in_length,
+            "stress": round(self.stress, 4),
+            "strain": round(self.strain, 6),
+            "youngs_modulus": round(self.youngs_modulus, 4),
+            "will_fail": self.will_fail(),
+            "timestamp": self.timestamp,
+        }
+ 
+    def __str__(self) -> str:
+        return (
+            f"Test on {self.material.name}: "
+            f"Stress={self.stress:.2f} MPa, "
+            f"Strain={self.strain:.6f}, "
+            f"Young's Modulus={self.youngs_modulus:.2f} GPa"
+        )
+ 
+    def __eq__(self, other):
+        if not isinstance(other, StressStrainTest):
+            return False
+        return (
+            self.material.name == other.material.name
+            and self.stress == other.stress
+            and self.strain == other.strain
+        )
+ 
+    def __lt__(self, other):
+        return self.stress < other.stress
+        
 class TestCollection:
  
     def __init__(self):
