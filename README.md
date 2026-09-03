@@ -1,5 +1,4 @@
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c3cf7cc1-c214-41e0-8c57-4b3ee9aaf4d8" />Project Title
-  Stress and Strain Analysis System
+Stress and Strain Analysis System
 
 Group Members
   Member	            Primary Responsibility
