@@ -12,25 +12,27 @@ class StressStrainTest:
         self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 class TestCollection:
+ 
     def __init__(self):
-        self.tests = []
-
+        self.tests: List[StressStrainTest] = []
+ 
     def add_test(self, test: StressStrainTest):
         self.tests.append(test)
-
-    def save_to_json(self, filename="results.json"):
-        data = [t.__dict__ for t in self.tests]
+ 
+    def save_to_json(self, filename: str = "results.json"):
+        data = [t.to_dict() for t in self.tests]
         with open(filename, "w") as f:
             json.dump(data, f, indent=4)
-
-    def export_to_csv(self, filename="results.csv"):
+ 
+    def export_to_csv(self, filename: str = "results.csv"):
         if not self.tests:
             return
-        keys = self.tests[0].__dict__.keys()
+        rows = [t.to_dict() for t in self.tests]
+        keys = rows[0].keys()
         with open(filename, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
-            writer.writerow([t.__dict__ for t in self.tests])
+            writer.writerows(rows)
 
 class ResultTestAnalysis:
     """Aggregates and analyzes a collection of stress-strain tests."""
