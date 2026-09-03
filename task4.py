@@ -1,0 +1,126 @@
+def calculate_stress(force: float, area: float) -> float:
+    """Calculate stress in MPa."""
+    if area <= 0:
+        raise ValueError("Cross-sectional area must be greater than zero.")
+    return force / area
+
+def calculate_strain(change_in_length: float, original_length: float) -> float:
+    """Calculate dimensionless strain."""
+    if original_length <= 0:
+        raise ValueError("Original length must be greater than zero.")
+    return change_in_length / original_length
+
+def calculate_youngs_modulus(stress: float, strain: float) -> float:
+    """Calculate Young's Modulus in GPa."""
+    if strain <= 0:
+        raise ValueError("Strain must be greater than zero.")
+    return (stress / strain) / 1000.0
+
+def calculate_factor_of_safety(yield_strength: float, applied_stress: float) -> float:
+    """Calculate Factor of Safety."""
+    if applied_stress <= 0:
+        raise ValueError("Applied stress must be greater than zero.")
+    return yield_strength / applied_stress
+
+def get_positive_float(prompt: str) -> float:
+    """Validate and return a positive float from user input."""
+    while True:
+        try:
+            val = float(input(prompt))
+            if val <= 0:
+                print("Error: Value must be strictly greater than zero.")
+                continue
+            return val
+        except ValueError:
+            print("Error: Invalid numeric input.")
+
+def select_material() -> tuple[str, float]:
+    """Select material and return name and yield strength."""
+    materials = {
+        "1": ("Structural Steel (A36)", 250.0),
+        "2": ("Aluminum Alloy (6061-T6)", 276.0),
+        "3": ("Titanium Alloy (Ti-6Al-4V)", 880.0),
+        "4": ("Custom Material", None)
+    }
+    print("\nSelect Material:")
+    for key, (name, strength) in materials.items():
+        if strength:
+            print(f"  [{key}] {name} - Yield Strength: {strength} MPa")
+        else:
+            print(f"  [{key}] {name}")
+    while True:
+        choice = input("Enter choice (1-4): ").strip()
+        if choice in materials:
+            name, strength = materials[choice]
+            if strength is None:
+                strength = get_positive_float("Enter custom yield strength (MPa): ")
+            return name, strength
+        print("Error: Selection out of range.")
+
+def create_test_record(sample_id: str, material: str, stress: float, strain: float, modulus: float, fos: float) -> dict:
+    """Package results into a dictionary record."""
+    return {
+        "sample_id": sample_id,
+        "material": material,
+        "stress_mpa": round(stress, 2),
+        "strain": round(strain, 6),
+        "youngs_modulus_gpa": round(modulus, 2),
+        "factor_of_safety": round(fos, 2),
+        "status": "SAFE" if fos >= 1.0 else "FAILED"
+    }
+
+def add_record_to_history(history_list: list, record: dict) -> None:
+    history_list.append(record)
+
+def display_test_results(record: dict) -> None:
+    print("\n" + "="*40)
+    print(f"TEST RESULTS: {record['sample_id']}")
+    print("="*40)
+    print(f"Material         : {record['material']}")
+    print(f"Calculated Stress: {record['stress_mpa']} MPa")
+    print(f"Calculated Strain: {record['strain']}")
+    print(f"Young's Modulus  : {record['youngs_modulus_gpa']} GPa")
+    print(f"Factor of Safety : {record['factor_of_safety']} ({record['status']})")
+    print("="*40 + "\n")
+
+def display_session_summary(history_list: list) -> None:
+    if not history_list:
+        print("\nNo records saved in this session.")
+        return
+    print("\n" + "#"*65)
+    print("SESSION HISTORY SUMMARY")
+    print("#"*65)
+    header = f"{'Sample ID':<12} | {'Material':<22} | {'Stress':<8} | {'FoS':<6} | {'Status'}"
+    print(header)
+    print("-" * len(header))
+    for r in history_list:
+        print(f"{r['sample_id']:<12} | {r['material']:<22} | {r['stress_mpa']:<8} | {r['factor_of_safety']:<6} | {r['status']}")
+    print("#"*65 + "\n")
+
+def main():
+    test_history = []
+    test_counter = 1
+    while True:
+        sample_id = f"SAMPLE-{test_counter:03d}"
+        print(f"\nPerforming calculation for {sample_id}...")
+        material_name, yield_strength = select_material()
+        force = get_positive_float("Enter Force applied (N): ")
+        area = get_positive_float("Enter Cross-Sectional Area (mm²): ")
+        orig_len = get_positive_float("Enter Original Length (mm): ")
+        dl = get_positive_float("Enter Change in Length / ΔL (mm): ")
+        stress = calculate_stress(force, area)
+        strain = calculate_strain(dl, orig_len)
+        modulus = calculate_youngs_modulus(stress, strain)
+        fos = calculate_factor_of_safety(yield_strength, stress)
+        record = create_test_record(sample_id, material_name, stress, strain, modulus, fos)
+        add_record_to_history(test_history, record)
+        display_test_results(record)
+        test_counter += 1
+        cont = input("Perform another calculation? (y/n): ").strip().lower()
+        if cont != 'y':
+            break
+    display_session_summary(test_history)
+
+if __name__ == "__main__":
+    main()
+
