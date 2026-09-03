@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import csv
+from pathlib import Path 
 
 class StressStrainTest:
     def __init__(self, material_name: str, force: float, area: float, orig_len: float, delta_len: float):
@@ -20,8 +21,8 @@ class TestCollection:
 
     def save_to_json(self, filename="results.json"):
         data = [t.__dict__ for t in self.tests]
-        with open(filename, "w") as f:
-            json.dump(data, f, indent=4)
+        Path(filename).write_text(json.dumps(data, indent =4))
+      
 
     def export_to_csv(self, filename="results.csv"):
         if not self.tests:
