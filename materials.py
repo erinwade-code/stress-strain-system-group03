@@ -4,12 +4,7 @@ from typing import List
 
 @dataclass
 class MaterialProperties:
-    """Properties of a material.
-
-    Implemented as a dataclass since it's a plain, data-centric container.
-    Validation happens in __post_init__ since dataclasses don't get
-    property setters called during __init__.
-    """
+    """Properties of a material"""
 
     density: float  # kg/m³
     yield_strength: float  # MPa
