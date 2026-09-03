@@ -64,7 +64,7 @@ def analyze_safety(stress_pa, material):
     factor_of_safety = yield_strength / stress_mpa 
 
     print()
-    print(f"Calculated stress: {stress_mpa::.2f} MPa")
+    print(f"Calculated stress: {stress_mpa:.2f} MPa")
     print(f"{material['name']} yield strength: {yield_strength} MPa")
     print(f"Factor of safety: {factor_of_safety:.2f}")
 
@@ -83,10 +83,10 @@ def main():
         material = select_material()
         print()
 
-        force = get_poisitive_float("Enter applied force (N): ")
-        area = get_poisitive_float("Enter cross-sectional area (m^2):")
-        original_length = get_poisitive_float("Enter original length (m):")
-        change_in_length = get_poisitive_float("Enter change in length (m): ", allow_zero=True)
+        force = get_positive_float("Enter applied force (N): ")
+        area = get_positive_float("Enter cross-sectional area (m^2):")
+        original_length = get_positive_float("Enter original length (m):")
+        change_in_length = get_positive_float("Enter change in length (m): ", allow_zero=True)
 
         stress = force / area
         strain = change_in_length / original_length
@@ -113,6 +113,8 @@ def main():
 
         if again in ("n", "no"):
             print("\n Thank you for using the Stress & Strain Calculator.")
+            break
+
 
 if __name__ == "__main__":
     main()
