@@ -30,5 +30,5 @@ class TestCollection:
         with open(filename, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
-            writer.writerow([t.__dict__ for t in self.tests])
+            writer.writerows([t.__dict__ for t in self.tests])
         
