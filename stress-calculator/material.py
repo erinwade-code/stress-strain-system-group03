@@ -4,23 +4,23 @@ class Material:
     def __init__(self, name: str, properties: MaterialProperties):
         self.name = name
         self.properties = properties
-
+ 
     def __str__(self) -> str:
         return f"{self.name} (Density: {self.properties.density} kg/m³)"
-
+ 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Material):
             return False
         return self.name == other.name
-
+ 
     def __lt__(self, other) -> bool:
         if not isinstance(other, Material):
             return NotImplemented
         return self.properties.yield_strength < other.properties.yield_strength
-
+ 
     def can_withstand_stress(self, stress: float) -> bool:
         return stress < self.properties.yield_strength
-
+ 
 class Plastic(Material):
     valid = ("PVC", "Polyethylene", "Nylon")
 
