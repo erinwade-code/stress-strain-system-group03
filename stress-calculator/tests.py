@@ -8,7 +8,7 @@ class StressStrainTest:
 
     def __init__(
         self,
-        material: Material,
+        material: material,
         force: float,
         area: float,
         original_length: float,
