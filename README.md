@@ -59,6 +59,7 @@ External Dependencies: This project relies entirely on the Python Standard Libra
 
 
 How to Run the Program
+
   -Open your terminal or command prompt.
   
   -Navigate to the root folder of the project.
