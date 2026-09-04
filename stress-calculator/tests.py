@@ -51,11 +51,6 @@ class StressStrainTest:
         return not self.material.can_withstand_stress(self.stress)
  
     def to_dict(self) -> dict:
-        """Flat, JSON/CSV-friendly representation of this test.
- 
-        Using this instead of __dict__ directly avoids trying to
-        serialize the Material object itself.
-        """
         return {
             "material_name": self.material.name,
             "force": self._force,
@@ -91,23 +86,23 @@ class StressStrainTest:
 class TestCollection:
     def __init__(self):
         self.tests = []
-
+ 
     def add_test(self, test: StressStrainTest):
         self.tests.append(test)
-
+ 
     def save_to_json(self, filename="results.json"):
-        data = [t.__dict__ for t in self.tests]
-        Path(filename).write_text(json.dumps(data, indent =4))
-      
-
+        data = [t.to_dict() for t in self.tests]
+        Path(filename).write_text(json.dumps(data, indent=4))
+ 
     def export_to_csv(self, filename="results.csv"):
         if not self.tests:
             return
-        keys = self.tests[0].__dict__.keys()
+        rows = [t.to_dict() for t in self.tests]
+        keys = rows[0].keys()
         with open(filename, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=keys)
             writer.writeheader()
-            writer.writerows([t.__dict__ for t in self.tests])
+            writer.writerows(rows)
 
 class ResultTestAnalysis:
     """Aggregates and analyzes a collection of stress-strain tests."""
