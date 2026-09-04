@@ -1,0 +1,13 @@
+[
+    {
+        "material_name": "Structural Steel",
+        "force": 1000.0,
+        "area": 5.0,
+        "original_length": 0.01,
+        "change_in_length": 0.01,
+        "stress": 200.0,
+        "strain": 1.0,
+        "youngs_modulus": 0.2,
+        "will_fail": false
+    }
+]
