@@ -26,6 +26,12 @@ def main():
     print(f"\nCalculated Stress: {stress:.2f} Pa ({pa_to_mpa(stress):.2f} MPa)")
     print(f"Calculated Strain: {strain:.6f}")
 
+    try:
+        test_entry = StressStrainTest(material, force, area, orig_l, delta_l)
+    except ValueError as exc:
+        print(f"Could not create test record: {exc}")
+        return
+    
     test_entry = StressStrainTest(material, force, area, orig_l, delta_l)
     print(test_entry)
     print("FAILS under this load!" if test_entry.will_fail() else "Passes safely.")
