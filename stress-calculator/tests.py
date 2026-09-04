@@ -2,11 +2,12 @@ from datetime import datetime
 from material import Material
 import json
 import csv
-from pathlib import Path 
-
+from pathlib import Path
+from typing import List
+ 
 class StressStrainTest:
     """A single stress-strain test."""
-
+ 
     def __init__(
         self,
         material: Material,
@@ -22,33 +23,51 @@ class StressStrainTest:
         if original_length <= 0:
             raise ValueError("Original length must be positive")
         # Change in length can be negative (compression)
-
+ 
         self.material = material
         self._force = force
         self._area = area
         self._original_length = original_length
         self._change_in_length = change_in_length
-
+ 
     @property
     def stress(self) -> float:
         """Calculate stress in MPa."""
         return self._force / self._area
-
+ 
     @property
     def strain(self) -> float:
         """Calculate strain (dimensionless)."""
         return self._change_in_length / self._original_length
-
+ 
     @property
     def youngs_modulus(self) -> float:
         """Calculate Young's modulus in GPa."""
         # Convert from MPa to GPa
         return (self.stress / self.strain) / 1000
-
+ 
     def will_fail(self) -> bool:
         """Determine if the material is likely to fail under this test."""
         return not self.material.can_withstand_stress(self.stress)
-
+ 
+    def to_dict(self) -> dict:
+        """Flat, JSON/CSV-friendly representation of this test.
+ 
+        Using this instead of __dict__ directly avoids trying to
+        serialize the Material object itself.
+        """
+        return {
+            "material_name": self.material.name,
+            "force": self._force,
+            "area": self._area,
+            "original_length": self._original_length,
+            "change_in_length": self._change_in_length,
+            "stress": round(self.stress, 4),
+            "strain": round(self.strain, 6),
+            "youngs_modulus": round(self.youngs_modulus, 4),
+            "will_fail": self.will_fail(),
+        }
+ 
     def __str__(self) -> str:
         return (
             f"Test on {self.material.name}: "
@@ -56,7 +75,7 @@ class StressStrainTest:
             f"Strain={self.strain:.6f}, "
             f"Young's Modulus={self.youngs_modulus:.2f} GPa"
         )
-
+ 
     def __eq__(self, other):
         if not isinstance(other, StressStrainTest):
             return False
@@ -65,10 +84,10 @@ class StressStrainTest:
             and self.stress == other.stress
             and self.strain == other.strain
         )
-
+ 
     def __lt__(self, other):
         return self.stress < other.stress
-
+        
 class TestCollection:
     def __init__(self):
         self.tests = []
