@@ -15,10 +15,10 @@ def main():
         ).strip()
     material = db[material_key]
 
-    force = float(input("Enter force (N): "))
-    area = float(input("Enter area (m^2): "))
-    orig_l = float(input("Enter original length (m): "))
-    delta_l = float(input("Enter delta length (m): "))
+    force = read_positive_float("Enter force (N): ")
+    area = read_positive_float("Enter area (m^2): ")
+    orig_l = read_positive_float("Enter original length (m): ")
+    delta_l = read_float("Enter delta length (m): ")
 
     stress = calculate_stress(force, area)
     strain = calculate_strain(delta_l, orig_l)
@@ -33,6 +33,25 @@ def main():
     history.add_test(test_entry)
     history.save_to_json()
     print("Test logged and saved to results.json!")
+
+def read_float(prompt: str) -> float:
+    """Keep prompting until the user enters a value that parses as a float."""
+    while True:
+        raw = input(prompt).strip()
+        try:
+            return float(raw)
+        except ValueError:
+            print(f"'{raw}' is not a valid number. Please try again.")
+ 
+ 
+def read_positive_float(prompt: str) -> float:
+    """Keep prompting until the user enters a number greater than zero."""
+    while True:
+        value = read_float(prompt)
+        if value <= 0:
+            print("Value must be greater than zero. Please try again.")
+            continue
+        return value
 
 if __name__ == "__main__":
     main()
