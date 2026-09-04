@@ -106,30 +106,30 @@ class TestCollection:
 
 class ResultTestAnalysis:
     """Aggregates and analyzes a collection of stress-strain tests."""
-
+ 
     def __init__(self, tests: List[StressStrainTest]):
         self.tests = tests
-
+ 
     def average_stress_by_material(self):
         stress_by_material = {}
         for test in self.tests:
             name = test.material.name
             stress_by_material.setdefault(name, []).append(test.stress)
-
+ 
         return {
             name: sum(stresses) / len(stresses)
             for name, stresses in stress_by_material.items()
         }
-
+ 
     def generate_summary_report(self) -> str:
         averages = self.average_stress_by_material()
         passed = sum(1 for test in self.tests if not test.will_fail())
         failed = sum(1 for test in self.tests if test.will_fail())
-
+ 
         averages_text = "".join(
             f"  {name}: {avg:.2f} MPa\n" for name, avg in averages.items()
         )
-
+ 
         report = (
             f"Test Summary Report\n"
             f"Total tests: {passed + failed}\n"
@@ -139,16 +139,16 @@ class ResultTestAnalysis:
             f"{averages_text}"
         )
         return report
-
+ 
     def describe_results(self, bar_width: int = 30) -> str:
         """A simple text-based 'visualization' of stress relative to yield
         strength for each test"""
         if not self.tests:
             return "No tests to describe."
-
+ 
         max_stress = max(test.stress for test in self.tests)
         scale = bar_width / max_stress if max_stress else 0
-
+ 
         lines = ["Stress vs. Yield Strength"]
         for test in self.tests:
             yield_strength = test.material.properties.yield_strength
