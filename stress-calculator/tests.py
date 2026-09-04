@@ -104,6 +104,63 @@ class TestCollection:
             writer.writeheader()
             writer.writerows(rows)
 
+    @staticmethod
+    def _material_lookup() -> dict:
+        """Map material display names back to Material objects."""
+        db = get_material_database()
+        return {material.name: material for material in db.values()}
+ 
+    def load_from_json(self, filename="results.json") -> list:
+        path = Path(filename)
+        if not path.exists():
+            raise FileNotFoundError(f"No such file: {filename}")
+ 
+        raw_rows = json.loads(path.read_text())
+        lookup = self._material_lookup()
+        loaded = []
+        for row in raw_rows:
+            material = lookup.get(row["material_name"])
+            if material is None:
+                raise ValueError(f"Unknown material: {row['material_name']}")
+            loaded.append(
+                StressStrainTest(
+                    material,
+                    row["force"],
+                    row["area"],
+                    row["original_length"],
+                    row["change_in_length"],
+                )
+            )
+ 
+        self.tests = loaded
+        return self.tests
+ 
+    def load_from_csv(self, filename="results.csv") -> list:
+        path = Path(filename)
+        if not path.exists():
+            raise FileNotFoundError(f"No such file: {filename}")
+ 
+        lookup = self._material_lookup()
+        loaded = []
+        with open(filename, newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                material = lookup.get(row["material_name"])
+                if material is None:
+                    raise ValueError(f"Unknown material: {row['material_name']}")
+                loaded.append(
+                    StressStrainTest(
+                        material,
+                        float(row["force"]),
+                        float(row["area"]),
+                        float(row["original_length"]),
+                        float(row["change_in_length"]),
+                    )
+                )
+ 
+        self.tests = loaded
+        return self.tests
+
 class ResultTestAnalysis:
     """Aggregates and analyzes a collection of stress-strain tests."""
  
